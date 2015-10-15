@@ -35,13 +35,11 @@ Cron expression can be specified using a hash or a string in the format:
 
 
 ```ruby
-# using cron expression string
-schedule = ::IceCube::Schedule.from_cron("* * * * 5")
-schedule.repeat_day
-# => 5
+# using cron expression string (not supported yet)
+schedule = ::IceCube::Schedule.from_cron(::Date.current, "* * * * 5")
 
 # using hash
-schedule = ::IceCube::Schedule.from_cron(:repeat_day => 5)
+schedule = ::IceCube::Schedule.from_cron(::Date.current, :repeat_day => 5)
 
 schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 # => [2015-03-05, 2015-04-05, 2015-06-05]
@@ -65,4 +63,5 @@ schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 - Does not yet support all recurrence options. More coming.
 
 ## todo
-- Add support for time
+- Add support for time options
+- Add support for string cron expressions
