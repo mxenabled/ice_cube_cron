@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ::IceCubeCron do
   context 'repeat options' do
     describe 'monthly' do
-      let(:ice_cube_model) { ::IceCube.from_cron(::Date.new(2015, 7, 1), :repeat_day => '1') }
+      let(:ice_cube_model) { ::IceCube::Schedule.from_cron(::Date.new(2015, 7, 1), :repeat_day => '1') }
 
       it 'for same day' do
         expect(ice_cube_model.occurrences_between(::Date.new(2015, 7, 1), ::Date.new(2015, 7, 1))).to eq([::Date.new(2015, 7, 1)])
@@ -15,7 +15,7 @@ describe ::IceCubeCron do
     end
 
     describe 'twice monthly' do
-      let(:ice_cube_model) { ::IceCube.from_cron(::Date.new(2015, 7, 1), :repeat_day => '1,15') }
+      let(:ice_cube_model) { ::IceCube::Schedule.from_cron(::Date.new(2015, 7, 1), :repeat_day => '1,15') }
 
       it 'for one month' do
         expect(ice_cube_model.occurrences_between(::Date.new(2015, 7, 1), ::Date.new(2015, 7, 31))).to eq([::Date.new(2015, 7, 1), ::Date.new(2015, 7, 15)])
@@ -28,7 +28,7 @@ describe ::IceCubeCron do
 
     describe 'bi-monthly' do
       let(:ice_cube_model) do
-        ::IceCube.from_cron(
+        ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 5, 1),
           :repeat_day => '1',
           :repeat_interval => '2'
@@ -46,7 +46,7 @@ describe ::IceCubeCron do
 
     describe 'every week' do
       let(:ice_cube_model) do
-        ::IceCube.from_cron(
+        ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 7, 6),
           :repeat_weekday => '1'
         )
@@ -85,7 +85,7 @@ describe ::IceCubeCron do
 
     describe 'bi-weekly' do
       let(:ice_cube_model) do
-        ::IceCube.from_cron(
+        ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 7, 6),
           :repeat_weekday => '1',
           :repeat_interval => '2'
@@ -125,7 +125,7 @@ describe ::IceCubeCron do
 
     describe 'annually' do
       let(:ice_cube_model) do
-        ::IceCube.from_cron(
+        ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 1, 1),
           :repeat_month => 2
         )
@@ -142,7 +142,7 @@ describe ::IceCubeCron do
 
     describe 'bi-annually' do
       let(:ice_cube_model) do
-        ::IceCube.from_cron(
+        ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 1, 1),
           :repeat_interval => 2,
           :repeat_month => 2,
@@ -158,7 +158,7 @@ describe ::IceCubeCron do
     describe 'last weekday of month' do
       context '31 day month' do
         let(:ice_cube_model) do
-          ::IceCube.from_cron(
+          ::IceCube::Schedule.from_cron(
             ::Date.new(2015, 1, 1),
             :repeat_weekday => '5L'
           )
@@ -171,7 +171,7 @@ describe ::IceCubeCron do
 
       context '29 day month' do
         let(:ice_cube_model) do
-          ::IceCube.from_cron(
+          ::IceCube::Schedule.from_cron(
             ::Date.new(2015, 1, 1),
             :repeat_weekday => '3L'
           )
@@ -186,7 +186,7 @@ describe ::IceCubeCron do
     describe 'last day of month' do
       context '31 day month' do
         let(:ice_cube_model) do
-          ::IceCube.from_cron(
+          ::IceCube::Schedule.from_cron(
             ::Date.new(2015, 1, 1),
             :repeat_day => 'L'
           )
@@ -200,7 +200,7 @@ describe ::IceCubeCron do
 
     describe 'Nth day of week of month' do
       let(:ice_cube_model) do
-        ::IceCube.from_cron(
+        ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 1, 1),
           :repeat_weekday => '1#2'
         )
@@ -218,7 +218,7 @@ describe ::IceCubeCron do
 
   context 'input types' do
     it 'handles ::DateTime as input' do
-      ice_cube_model = ::IceCube.from_cron(
+      ice_cube_model = ::IceCube::Schedule.from_cron(
         ::DateTime.new(2015, 5, 1),
         :repeat_day => '1',
         :repeat_interval => '2'
@@ -227,7 +227,7 @@ describe ::IceCubeCron do
     end
 
     it 'handles integer (epoch) as input' do
-      ice_cube_model = ::IceCube.from_cron(
+      ice_cube_model = ::IceCube::Schedule.from_cron(
         1_430_438_400, # Fri, 01 May 2015 00:00:00 GMT
         :repeat_day => '1',
         :repeat_interval => '2'
