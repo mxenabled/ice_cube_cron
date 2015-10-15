@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/ice_cube_cron.svg)](https://badge.fury.io/rb/ice_cube_cron)
+
 # ice_cube_cron
 
 Adds new methods to ice_cube to create schedules using standard cron expressions.
@@ -19,7 +21,6 @@ or add to Gemfile
 
 ## example
 
-Cron expression can be specified using a hash or a string in the format:
 ```
  # * * * * * *  command to execute
  # │ │ │ │ │ │
@@ -31,8 +32,11 @@ Cron expression can be specified using a hash or a string in the format:
  # │ └──────────────────── hour (0 - 23)
  # └───────────────────────── min (0 - 59)
 ```
+
 *[chart source](https://en.wikipedia.org/wiki/Cron)*
 
+
+Cron expression can be specified using a hash or a string in the format:
 
 ```ruby
 require 'ice_cube_cron'
