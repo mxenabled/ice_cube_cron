@@ -1,4 +1,7 @@
-module IceCubeCron
+module IceCubeCron # :nodoc: all
+  ##
+  # :category: Utilities
+  #
   module Util
     def self.sanitize_date_param(date)
       date = date.to_time(:utc) if date.is_a?(::Date) && !date.is_a?(::DateTime)

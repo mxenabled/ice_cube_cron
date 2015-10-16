@@ -223,7 +223,7 @@ describe ::IceCubeCron do
         :repeat_day => '1',
         :repeat_interval => '2'
       )
-      expect(ice_cube_model.occurrences_between(::DateTime.new(2015, 7, 1), ::DateTime.new(2015, 7, 31))).to eq([::DateTime.new(2015, 7, 1)])
+      expect(ice_cube_model.occurrences_between(::Date.new(2015, 7, 1), ::Date.new(2015, 7, 31))).to eq([::Date.new(2015, 7, 1)])
     end
 
     it 'handles integer (epoch) as input' do
@@ -232,7 +232,7 @@ describe ::IceCubeCron do
         :repeat_day => '1',
         :repeat_interval => '2'
       )
-      expect(ice_cube_model.occurrences_between(::DateTime.new(2015, 7, 1), ::DateTime.new(2015, 7, 31))).to eq([::DateTime.new(2015, 7, 1)])
+      expect(ice_cube_model.occurrences_between(::Date.new(2015, 7, 1), ::Date.new(2015, 7, 31))).to eq([::Date.new(2015, 7, 1)])
     end
   end
 end

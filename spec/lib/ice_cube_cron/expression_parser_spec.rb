@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ::IceCubeCron::ExpressionParser do
-  let(:expression_parser) do
+  let(:expression) do
     described_class.new(
       :repeat_interval => 2,
       :repeat_day => 3,
@@ -14,141 +14,146 @@ describe ::IceCubeCron::ExpressionParser do
   describe 'parses ::Hash expression' do
     describe 'repeat_interval' do
       it '[]' do
-        expect(expression_parser[:repeat_interval]).to eq(2)
+        expect(expression.interval).to eq(2)
       end
 
       it '[]=' do
-        expression_parser[:repeat_interval] = 13
-        expect(expression_parser[:repeat_interval]).to eq(13)
+        expression.interval = 13
+        expect(expression.interval).to eq(13)
       end
 
       it 'sanitizes' do
-        expression_parser[:repeat_interval] = 2
-        expect(expression_parser[:repeat_interval]).to eq(2)
+        expression.interval = 2
+        expect(expression.interval).to eq(2)
 
-        expression_parser[:repeat_interval] = nil
-        expect(expression_parser[:repeat_interval]).to eq(1)
+        expression.interval = nil
+        expect(expression.interval).to eq(1)
 
-        expression_parser[:repeat_interval] = '3'
-        expect(expression_parser[:repeat_interval]).to eq(3)
+        expression.interval = '3'
+        expect(expression.interval).to eq(3)
       end
     end
 
     describe 'repeat_day' do
       it '[]' do
-        expect(expression_parser[:repeat_day]).to eq([3])
+        expect(expression.day).to eq([3])
       end
 
       it '[]=' do
-        expression_parser[:repeat_day] = 6
-        expect(expression_parser[:repeat_day]).to eq([6])
+        expression.day = 6
+        expect(expression.day).to eq([6])
       end
 
       it 'sanitizes' do
-        expression_parser[:repeat_day] = 2
-        expect(expression_parser[:repeat_day]).to eq([2])
+        expression.day = 2
+        expect(expression.day).to eq([2])
 
-        expression_parser[:repeat_day] = nil
-        expect(expression_parser[:repeat_day]).to eq(nil)
+        expression.day = nil
+        expect(expression.day).to eq(nil)
 
-        expression_parser[:repeat_day] = '3'
-        expect(expression_parser[:repeat_day]).to eq([3])
+        expression.day = '3'
+        expect(expression.day).to eq([3])
       end
 
       it 'should accept single day expression' do
-        expression_parser.repeat_day = '1'
-        expect(expression_parser.repeat_day).to eq([1])
+        expression.day = '1'
+        expect(expression.day).to eq([1])
       end
 
       it 'should accept series expression' do
-        expression_parser.repeat_day = '1,3'
-        expect(expression_parser.repeat_day).to eq([1, 3])
+        expression.day = '1,3'
+        expect(expression.day).to eq([1, 3])
+      end
+
+      it 'should accept range expression' do
+        expression.day = '1-3'
+        expect(expression.day).to eq([1, 2, 3])
       end
 
       it 'should accept last day expression' do
-        expression_parser.repeat_day = 'L'
-        expect(expression_parser.repeat_day).to eq([-1])
+        expression.day = 'L'
+        expect(expression.day).to eq([-1])
       end
     end
 
     describe 'repeat_month' do
       it '[]' do
-        expect(expression_parser[:repeat_month]).to eq([4])
+        expect(expression.month).to eq([4])
       end
 
       it '[]=' do
-        expression_parser[:repeat_month] = 11
-        expect(expression_parser[:repeat_month]).to eq([11])
+        expression.month = 11
+        expect(expression.month).to eq([11])
       end
 
       it 'sanitizes' do
-        expression_parser[:repeat_month] = 2
-        expect(expression_parser[:repeat_month]).to eq([2])
+        expression.month = 2
+        expect(expression.month).to eq([2])
 
-        expression_parser[:repeat_month] = nil
-        expect(expression_parser[:repeat_month]).to eq(nil)
+        expression.month = nil
+        expect(expression.month).to eq(nil)
 
-        expression_parser[:repeat_month] = '3'
-        expect(expression_parser[:repeat_month]).to eq([3])
+        expression.month = '3'
+        expect(expression.month).to eq([3])
       end
     end
 
     describe 'repeat_year' do
       it '[]' do
-        expect(expression_parser[:repeat_year]).to eq([1990])
+        expect(expression.year).to eq([1990])
       end
 
       it '[]=' do
-        expression_parser[:repeat_year] = 1994
-        expect(expression_parser[:repeat_year]).to eq([1994])
+        expression.year = 1994
+        expect(expression.year).to eq([1994])
       end
 
       it 'sanitizes' do
-        expression_parser[:repeat_year] = 1992
-        expect(expression_parser[:repeat_year]).to eq([1992])
+        expression.year = 1992
+        expect(expression.year).to eq([1992])
 
-        expression_parser[:repeat_year] = nil
-        expect(expression_parser[:repeat_year]).to eq(nil)
+        expression.year = nil
+        expect(expression.year).to eq(nil)
 
-        expression_parser[:repeat_year] = '2001'
-        expect(expression_parser[:repeat_year]).to eq([2001])
+        expression.year = '2001'
+        expect(expression.year).to eq([2001])
       end
     end
 
     describe 'repeat_weekday' do
       it '[]' do
-        expect(expression_parser[:repeat_weekday]).to eq([0])
+        expect(expression.weekday).to eq([0])
       end
 
       it '[]=' do
-        expression_parser[:repeat_weekday] = 4
-        expect(expression_parser[:repeat_weekday]).to eq([4])
+        expression.weekday = 4
+        expect(expression.weekday).to eq([4])
       end
 
       it 'sanitizes' do
-        expression_parser[:repeat_weekday] = 2
-        expect(expression_parser[:repeat_weekday]).to eq([2])
+        expression.weekday = 2
+        expect(expression.weekday).to eq([2])
 
-        expression_parser[:repeat_weekday] = nil
-        expect(expression_parser[:repeat_weekday]).to eq(nil)
+        expression.weekday = nil
+        expect(expression.weekday).to eq(nil)
 
-        expression_parser[:repeat_weekday] = '3'
-        expect(expression_parser[:repeat_weekday]).to eq([3])
+        expression.weekday = '3'
+        expect(expression.weekday).to eq([3])
       end
 
       it 'should accept non-nth weekday expression' do
-        expression_parser.weekday = '1'
-        expect(expression_parser.weekday).to eq([1])
+        expression.weekday = '1'
+        expect(expression.weekday).to eq([1])
       end
 
       it 'should accept nth weekday expression' do
-        expression_parser.weekday = '1#3'
-        expect(expression_parser.weekday).to eq([{ 1 => [3] }])
+        expression.weekday = '1#3'
+        expect(expression.weekday).to eq([{ 1 => [3] }])
       end
 
       it 'should accept last weekday expression' do
-        expression_parser.weekday = '1L'
-        expect(expression_parser.weekday).to eq([{ 1 => [-1] }])
+        expression.weekday = '1L'
+        expect(expression.weekday).to eq([{ 1 => [-1] }])
       end
     end
   end

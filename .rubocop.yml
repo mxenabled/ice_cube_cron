@@ -8,7 +8,7 @@ Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 
 Style/Documentation:
-  Enabled: false
+  Enabled: true
 
 Metrics/LineLength:
   Enabled: false

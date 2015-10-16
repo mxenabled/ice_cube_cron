@@ -1,7 +1,21 @@
-module IceCubeCron
+module IceCubeCron # :nodoc:
+  ##
+  # Parses the incoming expression and splits it into meaningful parts.
+  #
   class ExpressionParser
-    attr_accessor :expression_hash
+    include ::IceCubeCron::ParserAttribute
 
+    ##
+    # Create a parsed expression
+    #
+    # Takes a hash of cron expression parts.
+    #
+    # ### Expression values:
+    # - interval
+    # - year
+    # - month
+    # - day
+    # - weekday
     def initialize(exp)
       self.expression_hash = {
         :repeat_interval => 1,
@@ -20,73 +34,39 @@ module IceCubeCron
       end
     end
 
-    def [](val_name)
-      send(val_name)
+    parser_attribute_accessor :interval do |val|
+      ExpressionParser.sanitize_integer_param(val, 1)
     end
 
-    def []=(val_name, new_val)
-      send("#{val_name}=", new_val)
+    parser_attribute_accessor :day do |val|
+      ExpressionParser.sanitize_day_param(val)
     end
 
-    def interval
-      expression_hash[:repeat_interval]
+    parser_attribute_accessor :month do |val|
+      ExpressionParser.sanitize_integer_array_param(val)
     end
-    alias_method :repeat_interval, :interval
 
-    def interval=(val)
-      expression_hash[:repeat_interval] = sanitize_integer_param(val, 1)
+    parser_attribute_accessor :year do |val|
+      ExpressionParser.sanitize_integer_array_param(val)
     end
-    alias_method :repeat_interval=, :interval=
 
-    def day
-      expression_hash[:repeat_day]
+    parser_attribute_accessor :weekday do |val|
+      ExpressionParser.sanitize_week_day_param(val)
     end
-    alias_method :repeat_day, :day
 
-    def day=(val)
-      expression_hash[:repeat_day] = sanitize_day_param(val)
-    end
-    alias_method :repeat_day=, :day=
-
-    def month
-      expression_hash[:repeat_month]
-    end
-    alias_method :repeat_month, :month
-
-    def month=(val)
-      expression_hash[:repeat_month] = sanitize_integer_array_param(val)
-    end
-    alias_method :repeat_month=, :month=
-
-    def year
-      expression_hash[:repeat_year]
-    end
-    alias_method :repeat_year, :year
-
-    def year=(val)
-      expression_hash[:repeat_year] = sanitize_integer_array_param(val)
-    end
-    alias_method :repeat_year=, :year=
-
-    def weekday
-      expression_hash[:repeat_weekday]
-    end
-    alias_method :repeat_weekday, :weekday
-
-    def weekday=(val)
-      expression_hash[:repeat_weekday] = sanitize_week_day_param(val)
-    end
-    alias_method :repeat_weekday=, :weekday=
-
-  private
-
-    def sanitize_integer_param(param, default = nil)
+    ##
+    # Sanitize given value to an integer
+    #
+    def self.sanitize_integer_param(param, default = nil)
       return default if param.blank?
 
       param.to_i
     end
 
-    def sanitize_day_param(param)
+    ##
+    # Sanitize given value to a valid day parameter
+    #
+    def self.sanitize_day_param(param)
       return nil if param.blank?
       return param if param.is_a?(::Array)
       return [param] if param.is_a?(::Integer)
@@ -94,30 +74,47 @@ module IceCubeCron
       param.to_s.split(',').map do |element|
         next -1 if element == 'L'
 
-        element.to_i
-      end
+        ExpressionParser.sanitize_integer_array_param(element)
+      end.flatten.uniq
     end
 
-    def sanitize_week_day_param(param)
+    ##
+    # Sanitize given value to a valid weekday parameter
+    #
+    def self.sanitize_week_day_param(param)
       return nil if param.blank?
       param.to_s.split(',').map do |element|
         if element =~ /[0-9]+#[0-9]+/
           parts = element.split('#')
-          { sanitize_integer_param(parts[0]) => sanitize_integer_array_param(parts[1]) }
+          { ExpressionParser.sanitize_integer_param(parts[0]) => ExpressionParser.sanitize_integer_array_param(parts[1]) }
         elsif element =~ /[0-9]+L/
-          { sanitize_integer_param(element) => [-1] }
+          { ExpressionParser.sanitize_integer_param(element) => [-1] }
         else
-          sanitize_integer_param(element)
+          ExpressionParser.sanitize_integer_param(element)
         end
       end
     end
 
-    def sanitize_integer_array_param(param)
+    ##
+    # Sanitize given value to an integer array
+    #
+    #--
+    # rubocop:disable Metrics/AbcSize
+    #++
+    def self.sanitize_integer_array_param(param)
       return nil if param.blank?
       return param if param.is_a?(::Array)
       return [param] if param.is_a?(::Integer)
 
-      param.split(',').map(&:to_i)
+      param.split(',').map do |element|
+        if element =~ /[0-9]+\-[0-9]+/
+          parts = element.split('-')
+          (parts[0].to_i..parts[1].to_i).to_a
+        else
+          element.to_i
+        end
+      end.flatten.uniq
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end

@@ -6,7 +6,7 @@ Adds new methods to ice_cube to create schedules using standard cron expressions
 
 ## description
 
-**ice_cube** is a sold library for projecting and querying recurrence rules. **Cron** is _the_ standard for expressing recurrence rules. This gem will allow you to generate ice_cube schedules using standard cron expressions [explained here](https://en.wikipedia.org/wiki/Cron). This includes range expressions, series expressions, "last" day of month, Nth weekday of month, etc.
+**[ice_cube](https://github.com/seejohnrun/ice_cube)** is a sold library for projecting and querying recurrence rules. **[Cron](https://en.wikipedia.org/wiki/Cron)** is _the_ standard for expressing recurrence rules. This gem will allow you to generate ice_cube schedules using standard cron expressions [explained here](https://en.wikipedia.org/wiki/Cron). This includes range expressions, series expressions, "last" day of month, Nth weekday of month, etc.
 
 PLEASE NOTE:
 This gem is a work-in-progress. Many features have yet to be implemented.

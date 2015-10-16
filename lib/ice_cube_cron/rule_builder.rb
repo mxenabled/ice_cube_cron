@@ -1,31 +1,39 @@
-module IceCubeCron
+module IceCubeCron # :nodoc:
+  ##
+  # Generates Rules based on parsed expression
+  #
   class RuleBuilder
-    def build_rule(params)
-      rule = build_root_recurrence_rule(params)
-      rule = rule.month_of_year(*params[:month]) unless params[:month].blank?
-      rule = rule.day_of_month(*params[:day]) unless params[:day].blank?
-      rule = build_weekday_rule(rule, params)
+    ##
+    # Generates a rule based on a parsed expression
+    #
+    def build_rule(expression)
+      rule = build_root_recurrence_rule(expression)
+      rule = rule.month_of_year(*expression.month) unless expression.month.blank?
+      rule = rule.day_of_month(*expression.day) unless expression.day.blank?
+      rule = build_weekday_rule(rule, expression)
 
       rule
     end
 
-    def build_weekday_rule(rule, params)
-      return rule.day_of_week(*params[:weekday]) if !params[:weekday].blank? && nth_day?(params[:weekday])
-      return rule.day(*params[:weekday]) unless params[:weekday].blank?
+    # :nodoc:
+    def build_weekday_rule(rule, expression)
+      return rule.day_of_week(*expression.weekday) if !expression.weekday.blank? && nth_day?(expression.weekday)
+      return rule.day(*expression.weekday) unless expression.weekday.blank?
 
       rule
     end
 
     # rubocop:disable Metrics/AbcSize
-    def build_root_recurrence_rule(params)
-      return ::IceCube::Rule.yearly(params[:interval]) unless params[:month].blank?
-      return ::IceCube::Rule.monthly(params[:interval]) if !params[:weekday].blank? && nth_day?(params[:weekday])
-      return ::IceCube::Rule.weekly(params[:interval]) unless params[:weekday].blank?
+    def build_root_recurrence_rule(expression) # :nodoc:
+      return ::IceCube::Rule.yearly(expression.interval) unless expression.month.blank?
+      return ::IceCube::Rule.monthly(expression.interval) if !expression.weekday.blank? && nth_day?(expression.weekday)
+      return ::IceCube::Rule.weekly(expression.interval) unless expression.weekday.blank?
 
-      ::IceCube::Rule.monthly(params[:interval])
+      ::IceCube::Rule.monthly(expression.interval)
     end
     # rubocop:enable Metrics/AbcSize
 
+    # :nodoc:
     def nth_day?(param)
       return false if param.nil? || param.empty?
       param[0].is_a?(::Hash)
