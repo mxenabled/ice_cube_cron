@@ -10,8 +10,12 @@ Style/AccessModifierIndentation:
 Style/Documentation:
   Enabled: true
 
+Style/SignalException:
+  Enabled: false
+
 Metrics/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
   Max: 15
+

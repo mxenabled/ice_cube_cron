@@ -18,6 +18,11 @@ describe ::IceCubeCron::RuleBuilder do
       expect(rule_builder.build_rule(expression)).to be_a(IceCube::WeeklyRule)
     end
 
+    it 'monthly (last week day of month)' do
+      expression.weekday = '2L'
+      expect(rule_builder.build_rule(expression)).to be_a(IceCube::MonthlyRule)
+    end
+
     it 'yearly' do
       expression.month = 2
       expect(rule_builder.build_rule(expression)).to be_a(IceCube::YearlyRule)

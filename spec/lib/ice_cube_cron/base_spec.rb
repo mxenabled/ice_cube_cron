@@ -214,6 +214,53 @@ describe ::IceCubeCron do
         expect(ice_cube_model.occurrences_between(::Date.new(2016, 2, 1), ::Date.new(2016, 4, 30))).to eq([::Date.new(2016, 2, 8), ::Date.new(2016, 3, 14), ::Date.new(2016, 4, 11)])
       end
     end
+
+    context 'year expression support (non-standard)' do
+      context 'in month of a year' do
+        let(:ice_cube_model) do
+          ::IceCube::Schedule.from_cron(
+            ::Date.new(2015, 1, 1),
+            :year => '2015',
+            :month => '6',
+            :day => '10'
+          )
+        end
+
+        it '#occurrences_between' do
+          expect(ice_cube_model.occurrences_between(::Date.new(2013, 1, 1), ::Date.new(2017, 12, 31))).to eq([::Date.new(2015, 6, 10)])
+        end
+      end
+
+      context 'in a month of multiple years' do
+        let(:ice_cube_model) do
+          ::IceCube::Schedule.from_cron(
+            ::Date.new(2015, 1, 1),
+            :year => '2015,2017',
+            :month => '6',
+            :day => '10'
+          )
+        end
+
+        it '#occurrences_between' do
+          expect(ice_cube_model.occurrences_between(::Date.new(2013, 1, 1), ::Date.new(2018, 12, 31))).to eq([::Date.new(2015, 6, 10), ::Date.new(2017, 6, 10)])
+        end
+      end
+
+      context 'multiple days in month of a year' do
+        let(:ice_cube_model) do
+          ::IceCube::Schedule.from_cron(
+            ::Date.new(2015, 1, 1),
+            :year => '2015',
+            :month => '6',
+            :day => '10,15'
+          )
+        end
+
+        it '#occurrences_between' do
+          expect(ice_cube_model.occurrences_between(::Date.new(2013, 1, 1), ::Date.new(2017, 12, 31))).to eq([::Date.new(2015, 6, 10), ::Date.new(2015, 6, 15)])
+        end
+      end
+    end
   end
 
   context 'input types' do
