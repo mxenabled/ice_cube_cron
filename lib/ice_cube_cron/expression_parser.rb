@@ -22,7 +22,8 @@ module IceCubeCron # :nodoc:
         :repeat_year => nil,
         :repeat_month => nil,
         :repeat_day => nil,
-        :repeat_weekday => nil
+        :repeat_weekday => nil,
+        :repeat_until => nil
       }
 
       if exp.is_a?(::Hash)
@@ -45,6 +46,8 @@ module IceCubeCron # :nodoc:
     parser_attribute_accessor :month do |val|
       ExpressionParser.sanitize_integer_array_param(val)
     end
+
+    parser_attribute_accessor :until
 
     parser_attribute_accessor :year do |val|
       ExpressionParser.sanitize_integer_array_param(val)

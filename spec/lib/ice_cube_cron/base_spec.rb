@@ -215,6 +215,20 @@ describe ::IceCubeCron do
       end
     end
 
+    context 'every month until date' do
+      let(:schedule) do
+        ::IceCube::Schedule.from_cron(
+          ::Date.new(2015, 1, 1),
+          :repeat_day => '1',
+          :repeat_until => ::Date.new(2015, 3, 1)
+        )
+      end
+
+      it 'ends on specified end date' do
+        expect(schedule.occurrences_between(::Date.new(2015, 1, 1), ::Date.new(2015, 6, 30))).to eq([::Date.new(2015, 1, 1), ::Date.new(2015, 2, 1), ::Date.new(2015, 3, 1)])
+      end
+    end
+
     context 'year expression support (non-standard)' do
       context 'in month of a year' do
         let(:ice_cube_model) do

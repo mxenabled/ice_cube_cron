@@ -11,6 +11,7 @@ module IceCubeCron # :nodoc:
       rule = build_yearly_rules(rule, expression)
       rule = build_weekday_rule(rule, expression)
       rule = rule.day_of_month(*expression.day) unless expression.day.blank?
+      rule = rule.until(expression.until) unless expression.until.blank?
 
       rule
     end
