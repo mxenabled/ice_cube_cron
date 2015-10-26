@@ -3,12 +3,60 @@ require 'spec_helper'
 describe ::IceCubeCron::ExpressionParser do
   let(:expression) do
     described_class.new(
+      nil,
       :repeat_interval => 2,
       :repeat_day => 3,
       :repeat_month => 4,
       :repeat_year => 1990,
       :repeat_weekday => 0
     )
+  end
+
+  describe 'parses ::String expression' do
+    # rubocop:disable Style/SymbolProc
+    let(:expression_str) { |example| example.description }
+    # rubocop:enable Style/SymbolProc
+    let(:expression) { described_class.new(expression_str) }
+
+    it '* * 2 * *' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(1)
+      expect(expression.expression_hash[:repeat_year]).to eq(nil)
+      expect(expression.expression_hash[:repeat_month]).to eq(nil)
+      expect(expression.expression_hash[:repeat_day]).to eq([2])
+      expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+    end
+
+    it '* * 1,15 * *' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(1)
+      expect(expression.expression_hash[:repeat_year]).to eq(nil)
+      expect(expression.expression_hash[:repeat_month]).to eq(nil)
+      expect(expression.expression_hash[:repeat_day]).to eq([1, 15])
+      expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+    end
+
+    it '* * 1 6,12 *' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(1)
+      expect(expression.expression_hash[:repeat_year]).to eq(nil)
+      expect(expression.expression_hash[:repeat_month]).to eq([6, 12])
+      expect(expression.expression_hash[:repeat_day]).to eq([1])
+      expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+    end
+
+    it '* * 1 6 * 2015' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(1)
+      expect(expression.expression_hash[:repeat_year]).to eq([2015])
+      expect(expression.expression_hash[:repeat_month]).to eq([6])
+      expect(expression.expression_hash[:repeat_day]).to eq([1])
+      expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+    end
+
+    it '* * * 6 1L *' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(1)
+      expect(expression.expression_hash[:repeat_year]).to eq(nil)
+      expect(expression.expression_hash[:repeat_month]).to eq([6])
+      expect(expression.expression_hash[:repeat_day]).to eq(nil)
+      expect(expression.expression_hash[:repeat_weekday]).to eq([1 => [-1]])
+    end
   end
 
   describe 'parses ::Hash expression' do

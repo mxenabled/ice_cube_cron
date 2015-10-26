@@ -4,9 +4,9 @@ module IceCubeCron # :nodoc:
   #
   module Extension
     ##
-    # Generates an ::IceCube::Schedule from a cron expression
+    # Generates an ::IceCube::Schedule from a cron expression_parts
     #
-    # :args: start_time, expression
+    # :args: start_time, expression_parts
     #
     # ## Examples
     #
@@ -17,10 +17,10 @@ module IceCubeCron # :nodoc:
     #
     # schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
     # # => [2015-03-05 00:00:00 UTC, 2015-04-05 00:00:00 UTC, 2015-05-05 00:00:00 UTC, 2015-06-05 00:00:00 UTC]
-    # ```
-    def from_cron(start_time, expression = {})
-      expression_parser = ::IceCubeCron::ExpressionParser.new(expression)
-      rule = ::IceCubeCron::RuleBuilder.new.build_rule(expression_parser)
+    #
+    def from_cron(start_time, *expression_parts)
+      expression = ::IceCubeCron::ExpressionParser.new(*expression_parts)
+      rule = ::IceCubeCron::RuleBuilder.new.build_rule(expression)
 
       schedule = ::IceCube::Schedule.new(::IceCubeCron::Util.sanitize_date_param(start_time))
       schedule.add_recurrence_rule(rule)
