@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ice_cube_cron (0.0.3)
+    ice_cube_cron (0.0.4)
       activesupport (~> 4)
       ice_cube (~> 0.13)
 
