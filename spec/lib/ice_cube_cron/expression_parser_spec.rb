@@ -8,7 +8,9 @@ describe ::IceCubeCron::ExpressionParser do
       :repeat_day => 3,
       :repeat_month => 4,
       :repeat_year => 1990,
-      :repeat_weekday => 0
+      :repeat_weekday => 0,
+      :repeat_hour => 5,
+      :repeat_minute => 6
     )
   end
 
@@ -18,20 +20,24 @@ describe ::IceCubeCron::ExpressionParser do
     # rubocop:enable Style/SymbolProc
     let(:expression) { described_class.new(expression_str) }
 
-    it '* * 2 * *' do
+    it '1 * 2 * *' do
       expect(expression.expression_hash[:repeat_interval]).to eq(1)
       expect(expression.expression_hash[:repeat_year]).to eq(nil)
       expect(expression.expression_hash[:repeat_month]).to eq(nil)
       expect(expression.expression_hash[:repeat_day]).to eq([2])
       expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+      expect(expression.expression_hash[:repeat_hour]).to eq(nil)
+      expect(expression.expression_hash[:repeat_minute]).to eq([1])
     end
 
-    it '* * 1,15 * *' do
+    it '* 12 1,15 * *' do
       expect(expression.expression_hash[:repeat_interval]).to eq(1)
       expect(expression.expression_hash[:repeat_year]).to eq(nil)
       expect(expression.expression_hash[:repeat_month]).to eq(nil)
       expect(expression.expression_hash[:repeat_day]).to eq([1, 15])
       expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+      expect(expression.expression_hash[:repeat_hour]).to eq([12])
+      expect(expression.expression_hash[:repeat_minute]).to eq(nil)
     end
 
     it '* * 1 6,12 *' do
@@ -40,6 +46,8 @@ describe ::IceCubeCron::ExpressionParser do
       expect(expression.expression_hash[:repeat_month]).to eq([6, 12])
       expect(expression.expression_hash[:repeat_day]).to eq([1])
       expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+      expect(expression.expression_hash[:repeat_hour]).to eq(nil)
+      expect(expression.expression_hash[:repeat_minute]).to eq(nil)
     end
 
     it '* * 1 6 * 2015' do
@@ -48,6 +56,8 @@ describe ::IceCubeCron::ExpressionParser do
       expect(expression.expression_hash[:repeat_month]).to eq([6])
       expect(expression.expression_hash[:repeat_day]).to eq([1])
       expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+      expect(expression.expression_hash[:repeat_hour]).to eq(nil)
+      expect(expression.expression_hash[:repeat_minute]).to eq(nil)
     end
 
     it '* * * 6 1L *' do
@@ -56,6 +66,8 @@ describe ::IceCubeCron::ExpressionParser do
       expect(expression.expression_hash[:repeat_month]).to eq([6])
       expect(expression.expression_hash[:repeat_day]).to eq(nil)
       expect(expression.expression_hash[:repeat_weekday]).to eq([1 => [-1]])
+      expect(expression.expression_hash[:repeat_hour]).to eq(nil)
+      expect(expression.expression_hash[:repeat_minute]).to eq(nil)
     end
   end
 
@@ -79,6 +91,80 @@ describe ::IceCubeCron::ExpressionParser do
 
         expression.interval = '3'
         expect(expression.interval).to eq(3)
+      end
+    end
+
+    describe 'repeat_minute' do
+      it '[]' do
+        expect(expression.minute).to eq([6])
+      end
+
+      it '[]=' do
+        expression.minute = 6
+        expect(expression.minute).to eq([6])
+      end
+
+      it 'sanitizes' do
+        expression.minute = 2
+        expect(expression.minute).to eq([2])
+
+        expression.minute = nil
+        expect(expression.minute).to eq(nil)
+
+        expression.minute = '3'
+        expect(expression.minute).to eq([3])
+      end
+
+      it 'should accept single minute expression' do
+        expression.minute = '1'
+        expect(expression.minute).to eq([1])
+      end
+
+      it 'should accept series expression' do
+        expression.minute = '1,3'
+        expect(expression.minute).to eq([1, 3])
+      end
+
+      it 'should accept range expression' do
+        expression.minute = '1-3'
+        expect(expression.minute).to eq([1, 2, 3])
+      end
+    end
+
+    describe 'repeat_hour' do
+      it '[]' do
+        expect(expression.hour).to eq([5])
+      end
+
+      it '[]=' do
+        expression.hour = 6
+        expect(expression.hour).to eq([6])
+      end
+
+      it 'sanitizes' do
+        expression.hour = 2
+        expect(expression.hour).to eq([2])
+
+        expression.hour = nil
+        expect(expression.hour).to eq(nil)
+
+        expression.hour = '3'
+        expect(expression.hour).to eq([3])
+      end
+
+      it 'should accept single hour expression' do
+        expression.hour = '1'
+        expect(expression.hour).to eq([1])
+      end
+
+      it 'should accept series expression' do
+        expression.hour = '1,3'
+        expect(expression.hour).to eq([1, 3])
+      end
+
+      it 'should accept range expression' do
+        expression.hour = '1-3'
+        expect(expression.hour).to eq([1, 2, 3])
       end
     end
 

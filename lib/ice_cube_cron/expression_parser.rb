@@ -11,6 +11,8 @@ module IceCubeCron # :nodoc:
       :repeat_month => nil,
       :repeat_day => nil,
       :repeat_weekday => nil,
+      :repeat_hour => nil,
+      :repeat_minute => nil,
       :repeat_until => nil
     }
 
@@ -67,6 +69,14 @@ module IceCubeCron # :nodoc:
 
     parser_attribute_accessor :weekday do |val|
       ExpressionParser.sanitize_week_day_param(val)
+    end
+
+    parser_attribute_accessor :hour do |val|
+      ExpressionParser.sanitize_integer_array_param(val)
+    end
+
+    parser_attribute_accessor :minute do |val|
+      ExpressionParser.sanitize_integer_array_param(val)
     end
 
     ##

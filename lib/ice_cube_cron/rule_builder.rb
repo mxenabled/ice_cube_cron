@@ -8,9 +8,10 @@ module IceCubeCron # :nodoc:
     #
     def build_rule(expression)
       rule = build_root_recurrence_rule(expression)
-      rule = build_yearly_rules(rule, expression)
+      rule = build_year_rules(rule, expression)
       rule = build_weekday_rule(rule, expression)
-      rule = rule.day_of_month(*expression.day) unless expression.day.blank?
+      rule = build_day_rules(rule, expression)
+      rule = build_time_rules(rule, expression)
       rule = rule.until(expression.until) unless expression.until.blank?
 
       rule
@@ -24,6 +25,32 @@ module IceCubeCron # :nodoc:
 
   private
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/PerceivedComplexity
+    def build_root_recurrence_rule(expression) # :nodoc:
+      return ::IceCube::Rule.minutely(expression.interval) if expression.minute.blank?
+      return ::IceCube::Rule.hourly(expression.interval) if expression.hour.blank?
+      unless nth_day?(expression.weekday)
+        return ::IceCube::Rule.weekly(expression.interval) if expression.day.blank? && !expression.weekday.blank?
+        return ::IceCube::Rule.daily(expression.interval) if expression.day.blank?
+      end
+      return ::IceCube::Rule.monthly(expression.interval) if expression.month.blank?
+
+      ::IceCube::Rule.yearly(expression.interval)
+    end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/PerceivedComplexity
+
+    # :nodoc:
+    def build_year_rules(rule, expression)
+      rule = rule.year(*expression.year) unless expression.year.blank?
+      rule = rule.month_of_year(*expression.month) unless expression.month.blank?
+
+      rule
+    end
+
     # :nodoc:
     def build_weekday_rule(rule, expression)
       return rule.day_of_week(*expression.weekday) if !expression.weekday.blank? && nth_day?(expression.weekday)
@@ -33,22 +60,18 @@ module IceCubeCron # :nodoc:
     end
 
     # :nodoc:
-    def build_yearly_rules(rule, expression)
-      rule = rule.year(*expression.year) unless expression.year.blank?
-      rule = rule.month_of_year(*expression.month) unless expression.month.blank?
+    def build_day_rules(rule, expression)
+      rule = rule.day_of_month(*expression.day) unless expression.day.blank?
 
       rule
     end
 
-    # rubocop:disable Metrics/AbcSize
-    def build_root_recurrence_rule(expression) # :nodoc:
-      return ::IceCube::Rule.yearly(expression.interval) unless expression.month.blank?
-      return ::IceCube::Rule.monthly(expression.interval) if !expression.weekday.blank? && nth_day?(expression.weekday)
-      return ::IceCube::Rule.monthly(expression.interval) unless expression.day.blank?
-      return ::IceCube::Rule.weekly(expression.interval) unless expression.weekday.blank?
+    # :nodoc:
+    def build_time_rules(rule, expression)
+      rule = rule.hour_of_day(*expression.hour) unless expression.hour.blank? || expression.hour == [0]
+      rule = rule.minute_of_hour(*expression.minute) unless expression.minute.blank? || expression.minute == [0]
 
-      ::IceCube::Rule.monthly(expression.interval)
+      rule
     end
-    # rubocop:enable Metrics/AbcSize
   end
 end

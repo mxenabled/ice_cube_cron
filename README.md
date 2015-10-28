@@ -69,4 +69,5 @@ schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 - Does not yet support all recurrence options. More coming.
 
 ## todo
-- Add support for time options
+- Add support for W special character
+- Change hash param `day` to `day_of_month`
