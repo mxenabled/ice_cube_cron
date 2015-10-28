@@ -243,6 +243,10 @@ describe ::IceCubeCron do
         it '#occurrences_between' do
           expect(ice_cube_model.occurrences_between(::Date.new(2013, 1, 1), ::Date.new(2017, 12, 31))).to eq([::Date.new(2015, 6, 10)])
         end
+
+        it '#to_s' do
+          expect(ice_cube_model.to_s).to eq('Yearly in 2015 in June on the 10th day of the month')
+        end
       end
 
       context 'in a month of multiple years' do
@@ -258,6 +262,10 @@ describe ::IceCubeCron do
         it '#occurrences_between' do
           expect(ice_cube_model.occurrences_between(::Date.new(2013, 1, 1), ::Date.new(2018, 12, 31))).to eq([::Date.new(2015, 6, 10), ::Date.new(2017, 6, 10)])
         end
+
+        it '#to_s' do
+          expect(ice_cube_model.to_s).to eq('Yearly in 2015 and 2017 in June on the 10th day of the month')
+        end
       end
 
       context 'multiple days in month of a year' do
@@ -272,6 +280,10 @@ describe ::IceCubeCron do
 
         it '#occurrences_between' do
           expect(ice_cube_model.occurrences_between(::Date.new(2013, 1, 1), ::Date.new(2017, 12, 31))).to eq([::Date.new(2015, 6, 10), ::Date.new(2015, 6, 15)])
+        end
+
+        it '#to_s' do
+          expect(ice_cube_model.to_s).to eq('Yearly in 2015 in June on the 10th and 15th days of the month')
         end
       end
     end

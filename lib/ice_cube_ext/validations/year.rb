@@ -35,7 +35,7 @@ module IceCube
         end
 
         def build_s(builder)
-          builder.piece(:year) << StringBuilder.nice_number(year)
+          builder.piece(:year) << year
         end
 
         def build_hash(builder)
@@ -47,7 +47,7 @@ module IceCube
         end
 
         StringBuilder.register_formatter(:year) do |entries|
-          "in #{StringBuilder.sentence(entries)} "
+          "in #{StringBuilder.sentence(entries)}"
         end
       end
     end
