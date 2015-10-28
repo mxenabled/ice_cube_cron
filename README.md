@@ -41,7 +41,7 @@ Cron expression can be specified using a hash or a string in the format:
 ```ruby
 require 'ice_cube_cron'
 
-# using cron expression string (not supported yet)
+# using cron expression string
 schedule = ::IceCube::Schedule.from_cron(::Date.current, "* * * * 5")
 
 # using hash
@@ -70,4 +70,3 @@ schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 
 ## todo
 - Add support for time options
-- Add support for string cron expressions
