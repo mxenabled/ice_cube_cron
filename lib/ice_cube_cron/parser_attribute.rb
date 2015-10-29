@@ -4,12 +4,14 @@ module IceCubeCron # :nodoc: all
       base.extend(::IceCubeCron::ParserAttribute::ClassMethods)
     end
 
+  private
+
     attr_accessor :expression_hash
 
     module ClassMethods # :nodoc:
       def parser_attribute_accessor(attr_name, &cleanser)
-        getter = "repeat_#{attr_name}".to_sym
-        setter = "repeat_#{attr_name}=".to_sym
+        getter = "#{attr_name}".to_sym
+        setter = "#{attr_name}=".to_sym
 
         define_method(getter) do
           expression_hash[getter]
@@ -20,8 +22,16 @@ module IceCubeCron # :nodoc: all
           expression_hash[getter] = val
         end
 
-        alias_method attr_name, getter
-        alias_method "#{attr_name}=".to_sym, setter
+        _define_parser_attribute_aliases(attr_name, getter, setter)
+      end
+
+    private
+
+      def _define_parser_attribute_aliases(attr_name, getter, setter)
+        alias_method "repeat_#{attr_name}=".to_sym, setter
+        alias_method "repeat_#{attr_name}".to_sym, getter
+        alias_method "cron_#{attr_name}=".to_sym, setter
+        alias_method "cron_#{attr_name}".to_sym, getter
       end
     end
   end

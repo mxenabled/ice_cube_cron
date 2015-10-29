@@ -31,9 +31,9 @@ module IceCubeCron # :nodoc:
     def build_root_recurrence_rule(expression) # :nodoc:
       return ::IceCube::Rule.minutely(expression.interval) if expression.minute.blank?
       return ::IceCube::Rule.hourly(expression.interval) if expression.hour.blank?
-      unless nth_day?(expression.weekday)
-        return ::IceCube::Rule.weekly(expression.interval) if expression.day.blank? && !expression.weekday.blank?
-        return ::IceCube::Rule.daily(expression.interval) if expression.day.blank?
+      unless nth_day?(expression.day_of_week)
+        return ::IceCube::Rule.weekly(expression.interval) if expression.day_of_month.blank? && !expression.day_of_week.blank?
+        return ::IceCube::Rule.daily(expression.interval) if expression.day_of_month.blank?
       end
       return ::IceCube::Rule.monthly(expression.interval) if expression.month.blank?
 
@@ -53,15 +53,15 @@ module IceCubeCron # :nodoc:
 
     # :nodoc:
     def build_weekday_rule(rule, expression)
-      return rule.day_of_week(*expression.weekday) if !expression.weekday.blank? && nth_day?(expression.weekday)
-      return rule.day(*expression.weekday) unless expression.weekday.blank?
+      return rule.day_of_week(*expression.day_of_week) if !expression.day_of_week.blank? && nth_day?(expression.day_of_week)
+      return rule.day(*expression.day_of_week) unless expression.day_of_week.blank?
 
       rule
     end
 
     # :nodoc:
     def build_day_rules(rule, expression)
-      rule = rule.day_of_month(*expression.day) unless expression.day.blank?
+      rule = rule.day_of_month(*expression.day_of_month) unless expression.day_of_month.blank?
 
       rule
     end

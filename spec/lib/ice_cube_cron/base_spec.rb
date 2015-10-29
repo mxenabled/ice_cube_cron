@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ::IceCubeCron do
   context 'repeat options' do
     describe 'monthly' do
-      let(:schedule) { ::IceCube::Schedule.from_cron(::Date.new(2015, 7, 1), :repeat_day => '1', :hour => 0, :minute => 0) }
+      let(:schedule) { ::IceCube::Schedule.from_cron(::Date.new(2015, 7, 1), :day_of_month => '1', :hour => 0, :minute => 0) }
 
       it 'for same day' do
         expect(schedule.occurrences_between(::Date.new(2015, 7, 1), ::Date.new(2015, 7, 1))).to eq([::Date.new(2015, 7, 1)])
@@ -15,7 +15,7 @@ describe ::IceCubeCron do
     end
 
     describe 'twice monthly' do
-      let(:schedule) { ::IceCube::Schedule.from_cron(::Date.new(2015, 7, 1), :repeat_day => '1,15', :hour => 0, :minute => 0) }
+      let(:schedule) { ::IceCube::Schedule.from_cron(::Date.new(2015, 7, 1), :day_of_month => '1,15', :hour => 0, :minute => 0) }
 
       it 'for one month' do
         expect(schedule.occurrences_between(::Date.new(2015, 7, 1), ::Date.new(2015, 7, 31))).to eq([::Date.new(2015, 7, 1), ::Date.new(2015, 7, 15)])
@@ -30,7 +30,7 @@ describe ::IceCubeCron do
       let(:schedule) do
         ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 5, 1),
-          :repeat_day => '1',
+          :day_of_month => '1',
           :repeat_interval => '2',
           :hour => 0,
           :minute => 0
@@ -50,7 +50,7 @@ describe ::IceCubeCron do
       let(:schedule) do
         ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 7, 6),
-          :repeat_weekday => '1',
+          :day_of_week => '1',
           :hour => 0,
           :minute => 0
         )
@@ -91,7 +91,7 @@ describe ::IceCubeCron do
       let(:schedule) do
         ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 7, 6),
-          :repeat_weekday => '1',
+          :day_of_week => '1',
           :repeat_interval => '2',
           :hour => 0,
           :minute => 0
@@ -134,7 +134,7 @@ describe ::IceCubeCron do
         ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 1, 1),
           :repeat_month => 2,
-          :day => 1,
+          :day_of_month => 1,
           :hour => 0,
           :minute => 0
         )
@@ -155,7 +155,7 @@ describe ::IceCubeCron do
           ::Date.new(2015, 1, 1),
           :repeat_interval => 2,
           :repeat_month => 2,
-          :repeat_day => 1,
+          :day_of_month => 1,
           :hour => 0,
           :minute => 0
         )
@@ -171,7 +171,7 @@ describe ::IceCubeCron do
         let(:schedule) do
           ::IceCube::Schedule.from_cron(
             ::Date.new(2015, 1, 1),
-            :repeat_weekday => '5L',
+            :day_of_week => '5L',
             :hour => 0,
             :minute => 0
           )
@@ -186,7 +186,7 @@ describe ::IceCubeCron do
         let(:schedule) do
           ::IceCube::Schedule.from_cron(
             ::Date.new(2015, 1, 1),
-            :repeat_weekday => '3L',
+            :day_of_week => '3L',
             :hour => 0,
             :minute => 0
           )
@@ -203,7 +203,7 @@ describe ::IceCubeCron do
         let(:schedule) do
           ::IceCube::Schedule.from_cron(
             ::Date.new(2015, 1, 1),
-            :repeat_day => 'L',
+            :day_of_month => 'L',
             :hour => 0,
             :minute => 0
           )
@@ -219,7 +219,7 @@ describe ::IceCubeCron do
       let(:schedule) do
         ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 1, 1),
-          :repeat_weekday => '1#2',
+          :day_of_week => '1#2',
           :hour => 0,
           :minute => 0
         )
@@ -238,7 +238,7 @@ describe ::IceCubeCron do
       let(:schedule) do
         ::IceCube::Schedule.from_cron(
           ::Date.new(2015, 1, 1),
-          :repeat_day => '1',
+          :day_of_month => '1',
           :repeat_until => ::Date.new(2015, 3, 1),
           :hour => 0,
           :minute => 0
@@ -257,7 +257,7 @@ describe ::IceCubeCron do
             ::Date.new(2015, 1, 1),
             :year => '2015',
             :month => '6',
-            :day => '10',
+            :day_of_month => '10',
             :hour => 0,
             :minute => 0
           )
@@ -278,7 +278,7 @@ describe ::IceCubeCron do
             ::Date.new(2015, 1, 1),
             :year => '2015,2017',
             :month => '6',
-            :day => '10',
+            :day_of_month => '10',
             :hour => 0,
             :minute => 0
           )
@@ -299,7 +299,7 @@ describe ::IceCubeCron do
             ::Date.new(2015, 1, 1),
             :year => '2015',
             :month => '6',
-            :day => '10,15',
+            :day_of_month => '10,15',
             :hour => 0,
             :minute => 0
           )
@@ -347,7 +347,7 @@ describe ::IceCubeCron do
     it 'handles ::DateTime as input' do
       schedule = ::IceCube::Schedule.from_cron(
         ::DateTime.new(2015, 5, 1),
-        :repeat_day => '1',
+        :day_of_month => '1',
         :repeat_interval => '2',
         :hour => 0,
         :minute => 0
@@ -358,7 +358,7 @@ describe ::IceCubeCron do
     it 'handles integer (epoch) as input' do
       schedule = ::IceCube::Schedule.from_cron(
         1_430_438_400, # Fri, 01 May 2015 00:00:00 GMT
-        :repeat_day => '1',
+        :day_of_month => '1',
         :repeat_interval => '2',
         :hour => 0,
         :minute => 0

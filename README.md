@@ -45,7 +45,7 @@ require 'ice_cube_cron'
 schedule = ::IceCube::Schedule.from_cron(::Date.current, "* * * * 5")
 
 # using hash
-schedule = ::IceCube::Schedule.from_cron(::Date.new(2015, 1, 5), :repeat_day => 5)
+schedule = ::IceCube::Schedule.from_cron(::Date.new(2015, 1, 5), :day_of_month => 5)
 
 schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 # => [2015-03-05 00:00:00 UTC, 2015-04-05 00:00:00 UTC, 2015-05-05 00:00:00 UTC, 2015-06-05 00:00:00 UTC]
@@ -53,7 +53,7 @@ schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 
 ## recurrence rule examples (date)
 
-|desc|interval|year|month|day|weekday|
+|desc|interval|year|month|day_of_month|day_of_week|
 |----|-------:|---:|----:|--:|------:|
 |1st of every month||||1||
 |1st and 15th of every month||||1,15||
@@ -71,3 +71,4 @@ schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 ## todo
 - Add support for W special character
 - Change hash param `day` to `day_of_month`
+- Improve expression validation
