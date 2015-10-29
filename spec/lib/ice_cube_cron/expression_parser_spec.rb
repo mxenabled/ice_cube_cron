@@ -69,6 +69,33 @@ describe ::IceCubeCron::ExpressionParser do
       expect(expression.expression_hash[:repeat_hour]).to eq(nil)
       expect(expression.expression_hash[:repeat_minute]).to eq(nil)
     end
+
+    it '*/5 * * * * *' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(5)
+      expect(expression.expression_hash[:repeat_year]).to eq(nil)
+      expect(expression.expression_hash[:repeat_month]).to eq(nil)
+      expect(expression.expression_hash[:repeat_day]).to eq(nil)
+      expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+      expect(expression.expression_hash[:repeat_hour]).to eq(nil)
+      expect(expression.expression_hash[:repeat_minute]).to eq(nil)
+    end
+
+    it '1 */12 * * * *' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(12)
+      expect(expression.expression_hash[:repeat_year]).to eq(nil)
+      expect(expression.expression_hash[:repeat_month]).to eq(nil)
+      expect(expression.expression_hash[:repeat_day]).to eq(nil)
+      expect(expression.expression_hash[:repeat_weekday]).to eq(nil)
+      expect(expression.expression_hash[:repeat_hour]).to eq(nil)
+      expect(expression.expression_hash[:repeat_minute]).to eq([1])
+    end
+
+    # Only one interval is supported
+    it '*/1 */12 * * * *' do
+      expect(expression.expression_hash[:repeat_interval]).to eq(12)
+      expect(expression.expression_hash[:repeat_hour]).to eq(nil)
+      expect(expression.expression_hash[:repeat_minute]).to eq(nil)
+    end
   end
 
   describe 'parses ::Hash expression' do

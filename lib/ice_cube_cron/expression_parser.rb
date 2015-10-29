@@ -85,17 +85,31 @@ module IceCubeCron # :nodoc:
     def string_to_expression_parts(expression_str)
       return {} if expression_str.nil?
 
-      parts = expression_str.split(/ +/)
+      parts, interval = split_parts_and_interval(expression_str)
 
       expression_parts = ::Hash[EXPRESSION_PART_KEYS.zip(parts)]
       expression_parts.select! do |_key, value|
-        next false if value.nil?
-        next false if value == '*'
-
-        true
+        !value.nil?
       end
+      expression_parts.merge!(:interval => interval) unless interval.nil?
 
       expression_parts
+    end
+
+    ##
+    # Split a cron string and extract the LAST interval that appears
+    #
+    def split_parts_and_interval(expression_str)
+      interval = nil
+      parts = expression_str.split(/ +/).map do |part|
+        part, part_interval = part.split('/')
+        interval = part_interval unless part_interval.blank?
+        next nil if part.blank? || part == '*'
+
+        part
+      end
+
+      [parts, interval]
     end
 
     ##
