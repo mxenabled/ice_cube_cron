@@ -24,7 +24,7 @@ describe ::IceCubeCron::ExpressionParser do
       expect(expression.interval).to eq(1)
       expect(expression.year).to eq(nil)
       expect(expression.month).to eq(nil)
-      expect(expression.day).to eq([2])
+      expect(expression.day_of_month).to eq([2])
       expect(expression.day_of_week).to eq(nil)
       expect(expression.hour).to eq(nil)
       expect(expression.minute).to eq([1])
