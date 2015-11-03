@@ -8,9 +8,6 @@ Adds new methods to ice_cube to create schedules using standard cron expressions
 
 **[ice_cube](https://github.com/seejohnrun/ice_cube)** is a sold library for projecting and querying recurrence rules. **[Cron](https://en.wikipedia.org/wiki/Cron)** is _the_ standard for expressing recurrence rules. This gem will allow you to generate ice_cube schedules using standard cron expressions [explained here](https://en.wikipedia.org/wiki/Cron). This includes range expressions, series expressions, "last" day of month, Nth weekday of month, etc.
 
-PLEASE NOTE:
-This gem is a work-in-progress. Many features have yet to be implemented.
-
 ## installation
 
     gem install ice_cube_cron
@@ -42,16 +39,18 @@ Cron expression can be specified using a hash or a string in the format:
 require 'ice_cube_cron'
 
 # using cron expression string
-schedule = ::IceCube::Schedule.from_cron(::Date.current, "* * * * 5")
+schedule = ::IceCube::Schedule.from_cron(::Date.current, "0 0 * * 5")
 
 # using hash
-schedule = ::IceCube::Schedule.from_cron(::Date.new(2015, 1, 5), :day_of_month => 5)
+schedule = ::IceCube::Schedule.from_cron(::Date.new(2015, 1, 5), :hour => 0, :minute => 0, :day_of_month => 5)
 
 schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 # => [2015-03-05 00:00:00 UTC, 2015-04-05 00:00:00 UTC, 2015-05-05 00:00:00 UTC, 2015-06-05 00:00:00 UTC]
 ```
 
-## recurrence rule examples (date)
+## recurrence rule examples
+
+* *These are __Date Only__ - hour and minute are set to zero*
 
 |desc|interval|year|month|day_of_month|day_of_week|
 |----|-------:|---:|----:|--:|------:|
@@ -65,8 +64,7 @@ schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 |last day every month||||L||
 
 ## notes
-- This gem is a work-in-progress.
-- Does not yet support all recurrence options. More coming.
+- Does not validate cron expressions
 
 ## todo
 - Add support for W special character
