@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ::IceCubeCron do
+describe ::IceCubeCron::Extension do
   context 'repeat options' do
     describe 'monthly' do
       let(:schedule) { ::IceCube::Schedule.from_cron(::Date.new(2015, 7, 1), :day_of_month => '1', :hour => 0, :minute => 0) }
