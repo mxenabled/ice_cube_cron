@@ -17,15 +17,11 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 require 'ice_cube_cron'
 require 'pry'
-
-require 'simplecov'
-SimpleCov.start
-if ENV['CI'] == 'true'
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

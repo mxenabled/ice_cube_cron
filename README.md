@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/ice_cube_cron.svg)](https://badge.fury.io/rb/ice_cube_cron) [![Build Status](https://travis-ci.org/mattnichols/ice_cube_cron.svg?branch=master)](https://travis-ci.org/mattnichols/ice_cube_cron) [![codecov.io](https://codecov.io/github/mattnichols/ice_cube_cron/coverage.svg?branch=master)](https://codecov.io/github/mattnichols/ice_cube_cron?branch=master)
+[![Gem Version](https://badge.fury.io/rb/ice_cube_cron.svg)](https://badge.fury.io/rb/ice_cube_cron) [![Build Status](https://travis-ci.org/mattnichols/ice_cube_cron.svg?branch=master)](https://travis-ci.org/mattnichols/ice_cube_cron) [![Code Climate](https://codeclimate.com/github/mattnichols/ice_cube_cron/badges/gpa.svg)](https://codeclimate.com/github/mattnichols/ice_cube_cron) [![Test Coverage](https://codeclimate.com/github/mattnichols/ice_cube_cron/badges/coverage.svg)](https://codeclimate.com/github/mattnichols/ice_cube_cron/coverage)
 
 # ice_cube_cron
 
