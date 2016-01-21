@@ -10,7 +10,7 @@ module IceCubeCron # :nodoc: all
 
     module ClassMethods # :nodoc:
       def parser_attribute_accessor(attr_name, &cleanser)
-        getter = "#{attr_name}".to_sym
+        getter = attr_name.to_s.to_sym
         setter = "#{attr_name}=".to_sym
 
         define_method(getter) do
@@ -18,7 +18,7 @@ module IceCubeCron # :nodoc: all
         end
 
         define_method(setter) do |val|
-          val = cleanser.call(val) if cleanser
+          val = yield val if cleanser
           expression_hash[getter] = val
         end
 
