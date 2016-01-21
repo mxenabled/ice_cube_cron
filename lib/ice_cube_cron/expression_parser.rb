@@ -83,7 +83,9 @@ module IceCubeCron # :nodoc:
       ExpressionParser.sanitize_integer_array_param(val)
     end
 
-    parser_attribute_accessor :until
+    parser_attribute_accessor :until do |val|
+      ::IceCubeCron::Util.sanitize_date_param(val)
+    end
 
     ##
     # Sanitize given value to a valid day parameter

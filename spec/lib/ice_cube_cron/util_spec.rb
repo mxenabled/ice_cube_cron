@@ -13,5 +13,9 @@ describe ::IceCubeCron::Util do
     it 'should handle datetime' do
       expect(described_class.sanitize_date_param(DateTime.new(2015, 5, 1, 0, 0, 0))).to eq(DateTime.new(2015, 5, 1, 0, 0, 0))
     end
+
+    it 'should handle string' do
+      expect(described_class.sanitize_date_param('2015-5-1')).to eq(DateTime.new(2015, 5, 1, 0, 0, 0))
+    end
   end
 end

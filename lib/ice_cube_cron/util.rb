@@ -4,6 +4,7 @@ module IceCubeCron # :nodoc: all
   #
   module Util
     def self.sanitize_date_param(date)
+      date = Date.parse(date) if date.is_a?(::String)
       date = date.to_time(:utc) if date.is_a?(::Date) && !date.is_a?(::DateTime)
       date = date.to_time.utc if date.is_a?(::DateTime)
       date = Time.at(date).utc if date.is_a?(::Integer)
