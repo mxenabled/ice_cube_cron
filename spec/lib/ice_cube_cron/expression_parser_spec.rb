@@ -317,6 +317,28 @@ describe ::IceCubeCron::ExpressionParser do
         expect(expression.day_of_week).to eq([{ 1 => [-1] }])
       end
     end
+
+    describe 'until' do
+      it '[]' do
+        expect(expression.until).to eq(nil)
+      end
+
+      it '[]=' do
+        expression.until = 1_453_334_400
+        expect(expression.until).to eq(::Time.at(1_453_334_400).utc)
+      end
+
+      it 'sanitizes' do
+        expression.until = 1_453_334_400
+        expect(expression.until).to eq(::Time.at(1_453_334_400).utc)
+
+        expression.until = nil
+        expect(expression.until).to eq(nil)
+
+        expression.until = ::Date.new(2016, 1, 21)
+        expect(expression.until).to eq(::Time.at(1_453_334_400).utc)
+      end
+    end
   end
 
   describe 'invalid parameters' do

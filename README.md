@@ -57,7 +57,7 @@ schedule.occurrences_between(::Date.new(2015, 3, 5), ::Date.new(2015, 6, 5))
 |1st of every month||||1||
 |1st and 15th of every month||||1,15||
 |every monday|||||1|
-|1st monday of every month|||||1#1|
+|1st tuesday of every month|||||2#1|
 |ever other friday|2||||5|
 |every 6 months on the 5th|6|||5||
 |last friday of every month|||||5L|
