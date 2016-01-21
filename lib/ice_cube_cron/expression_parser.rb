@@ -14,7 +14,7 @@ module IceCubeCron # :nodoc:
       :hour => nil,
       :minute => nil,
       :until => nil
-    }
+    }.freeze
 
     EXPRESSION_PART_KEYS = [
       :minute,
@@ -23,7 +23,7 @@ module IceCubeCron # :nodoc:
       :month,
       :day_of_week,
       :year
-    ]
+    ].freeze
 
     ##
     # Create a parsed expression
@@ -180,7 +180,7 @@ module IceCubeCron # :nodoc:
       expression_parts.select! do |_key, value|
         !value.nil?
       end
-      expression_parts.merge!(:interval => interval) unless interval.nil?
+      expression_parts[:interval] = interval unless interval.nil?
 
       expression_parts
     end
