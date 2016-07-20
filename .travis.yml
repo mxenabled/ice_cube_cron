@@ -1,9 +1,7 @@
 language: ruby
 rvm:
-  - ruby-1.9.3
-  - ruby-2.2.1
+  - ruby-2.2.2
   - jruby-9.0.1.0
-  - jruby-1.7.20.1
 before_install: gem install bundler -v 1.10.6
 addons:
   code_climate:
