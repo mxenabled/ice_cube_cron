@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   # Dependencies
   #
   s.add_dependency 'activesupport'
-  s.add_dependency 'ice_cube', '<= 0.13.0'
+  s.add_dependency 'ice_cube', '~> 0.16.0'
 
   ##
   # Development Dependencies
