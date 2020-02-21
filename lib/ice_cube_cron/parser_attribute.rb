@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IceCubeCron # :nodoc: all
   module ParserAttribute # :nodoc:
     def self.included(base)

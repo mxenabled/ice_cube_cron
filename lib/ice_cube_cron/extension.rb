@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IceCubeCron # :nodoc:
   ##
   # This adds the `.from_cron` extension to the `::IceCube::Schedule` class
