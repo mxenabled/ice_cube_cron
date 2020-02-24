@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IceCube
   module Validations
     ##
@@ -9,11 +11,11 @@ module IceCube
       #
       def year(*years)
         years.flatten.each do |year|
-          unless year.is_a?(Fixnum)
-            raise ArgumentError, "expecting Fixnum value for year, got #{year.inspect}"
-          end
+          raise ArgumentError, "expecting Fixnum value for year, got #{year.inspect}" unless year.is_a?(Integer)
+
           validations_for(:year) << Validation.new(year)
         end
+
         ::IceCube::Validations::FixedValue::INTERVALS[:year] = 100
         self
       end

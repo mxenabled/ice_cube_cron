@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IceCubeCron # :nodoc:
   ##
   # Parses the incoming expression and splits it into meaningful parts.
@@ -16,13 +18,13 @@ module IceCubeCron # :nodoc:
       :until => nil
     }.freeze
 
-    EXPRESSION_PART_KEYS = [
-      :minute,
-      :hour,
-      :day_of_month,
-      :month,
-      :day_of_week,
-      :year
+    EXPRESSION_PART_KEYS = %i[
+      minute
+      hour
+      day_of_month
+      month
+      day_of_week
+      year
     ].freeze
 
     ##
@@ -138,6 +140,7 @@ module IceCubeCron # :nodoc:
     #
     def self.sanitize_week_day_param(param)
       return nil if param.blank?
+
       param.to_s.split(',').map do |element|
         if element =~ /[0-9]+#[0-9]+/
           parts = element.split('#')
@@ -177,8 +180,8 @@ module IceCubeCron # :nodoc:
       parts, interval = split_parts_and_interval(expression_str)
 
       expression_parts = ::Hash[EXPRESSION_PART_KEYS.zip(parts)]
-      expression_parts.select! do |_key, value|
-        !value.nil?
+      expression_parts.reject! do |_key, value|
+        value.nil?
       end
       expression_parts[:interval] = interval unless interval.nil?
 
